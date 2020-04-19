@@ -277,8 +277,11 @@ class Party {
     this.neighbour = new Neighbour();
 
     this.musicVolume = 0.2;
-    this.foodAmount = this.guests.length / 2;
-    this.drinksAmount = this.guests.length / 2;
+
+    this.maxFoodAmount = this.guests.length / 2;
+    this.maxDrinksAmount = this.guests.length / 2;
+    this.foodAmount = this.maxFoodAmount;
+    this.drinksAmount = this.maxDrinksAmount;
 
     this.state = Party.STATE_RUNNING;
 
@@ -304,6 +307,14 @@ class Party {
 
   relativeNoiseLevel() {
     return this.noiseLevel() / this.neighbour.noiseTolerance(this.currentTick);
+  }
+
+  relativeFoodAmount() {
+    return this.foodAmount / this.maxFoodAmount;
+  }
+
+  relativeDrinksAmount() {
+    return this.drinksAmount / this.maxDrinksAmount;
   }
 
   totalMood() {
@@ -452,20 +463,23 @@ function render(ctx, party) {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    drawMeter(ctx, 10, 10, 150, 10, party.totalMood(), 'green');
+    drawMeter(ctx, 10, 10, 150, 10, party.totalMood(), 'yellow');
     // FIXME: Cap noise level meter to 1
     drawMeter(ctx, 10, 25, 150, 10, party.relativeNoiseLevel(), 'red');
+    drawMeter(ctx, 10, 40, 150, 10, party.relativeFoodAmount(), 'green');
+    drawMeter(ctx, 10, 55, 150, 10, party.relativeDrinksAmount(), 'blue');
 
 
     ctx.fillStyle = 'white';
     ctx.font = '12px sans-serif';
     ctx.textBaseline = 'top';
     const currentTime = party.currentTime();
-    ctx.fillText(currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), 10, 40)
-    ctx.fillText(`${party.guests.length}/${party.originalGuestCount} guests`, 10, 55);
+    ctx.fillText(currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), 10, 70)
+    ctx.fillText(`${party.guests.length}/${party.originalGuestCount} guests`, 10, 85);
 
 
     // Draw stations
+    ctx.strokeStyle = 'white';
     STATIONS.forEach(station => {
       drawCircle(ctx, station.pos.i, station.pos.j, station.radius);
     });
