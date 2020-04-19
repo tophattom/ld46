@@ -79,7 +79,7 @@ class Guest {
   constructor(name) {
     this.name = name;
 
-    this.musicMoodEffect = rand(-1, 1);
+    this.musicMoodEffect = rand(-0.5, 1);
     // this.bacLoudnessEffect = 0.0;
 
     this.hunger = rand(0, 0.1);
@@ -96,20 +96,31 @@ class Guest {
     this.targetPos = null;
   }
 
+  hungerMoodEffect() {
+    return Math.pow(this.hunger, 2);
+  }
+
+  thirstMoodEffect() {
+    return Math.pow(this.thirst, 2);
+  }
+
   mood(party) {
-    return 1 - this.hunger - this.thirst + (party.musicVolume * this.musicMoodEffect);
+    const needsEffect = this.hungerMoodEffect() + this.thirstMoodEffect();
+    const musicEffect = party.musicVolume * this.musicMoodEffect;
+    return Math.max(0, Math.min(1, 1 - needsEffect + musicEffect));
   }
 
   hungerLoudness(party) {
-    return Math.max(0, this.hunger - party.foodAmount);
+    return Math.pow(Math.max(0, this.hunger - party.foodAmount), 5) / 5;
   }
 
   thirstLoudness(party) {
-    return Math.max(0, this.thirst - party.drinksAmount);
+    return Math.pow(Math.max(0, this.thirst - party.drinksAmount), 5) / 4;
   }
 
   loudness(party) {
-    return (this.baseLoudness + this.hungerLoudness(party) + this.thirstLoudness(party)) * (1 + this.bac);
+    const needsEffect = this.hungerLoudness(party) + this.thirstLoudness(party);
+    return (this.baseLoudness + needsEffect) * (1 + this.bac);
   }
 
   wantsToLeave(party) {
@@ -437,6 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log(party);
 
   window.requestAnimationFrame(render(ctx, party));
+  // window.setInterval(() => { party.tick() }, 1000);
 });
 
 
