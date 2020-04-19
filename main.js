@@ -90,7 +90,7 @@ class Guest {
     // this.mood = 0.0;
 
     this.state = Guest.STATE_WANDERING;
-    this.stateQueue = [];
+
     this.pos = new Vector(rand(0, CANVAS_WIDTH), rand(0, CANVAS_HEIGHT));
     this.vel = new Vector(rand(-1, 1), rand(-1, 1));
     this.targetPos = null;
@@ -127,8 +127,16 @@ class Guest {
     return this.state === Guest.STATE_LEFT;
   }
 
+  isLeaving() {
+    return this.state === Guest.STATE_LEAVING;
+  }
+
+  isInIdleState() {
+    return this.state === Guest.STATE_WANDERING || this.state === Guest.STATE_HANGING;
+  }
+
   tick(party) {
-    if (this.state === Guest.STATE_LEAVING || this.state === Guest.STATE_LEFT) {
+    if (this.isLeaving() || this.hasLeft()) {
       return;
     }
 
@@ -137,20 +145,20 @@ class Guest {
     this.bac = Math.max(0, this.bac - 0.01);
     this.musicMoodEffect = Math.min(1, Math.max(0, rand(-0.1, 0.1)));
 
-    if (Math.random() < this.hunger) {
+    if (Math.random() < this.hunger && this.isInIdleState()) {
       this.state = Guest.STATE_GETTING_FOOD;
       this.logAction('Ate');
       this.hunger -= party.eat(this.hunger);
     }
 
-    if (Math.random() < this.thirst) {
+    if (Math.random() < this.thirst && this.isInIdleState()) {
       this.state = Guest.STATE_GETTING_DRINK;
       this.logAction('Drank');
       this.thirst -= party.drink(this.thirst);
       // TODO: Increase BAC here
     }
 
-    if (this.wantsToLeave(party)) {
+    if (this.wantsToLeave(party) && this.isInIdleState()) {
       this.state = Guest.STATE_LEAVING;
     }
 
@@ -184,7 +192,7 @@ class Guest {
     if (this.targetPos !== null && this.isAtTarget()) {
       this.targetPos = null;
 
-      if (this.state === Guest.STATE_LEAVING) {
+      if (this.isLeaving()) {
         this.state = Guest.STATE_LEFT;
       } else {
         this.state = Guest.STATE_WANDERING;
@@ -219,26 +227,6 @@ class Guest {
 
   isAtTarget() {
     return Vector.distance(this.pos, this.targetPos) < 2;
-  }
-
-  isStateQueued(state) {
-    return this.state === state || this.stateQueue.indexOf(state) !== -1;
-  }
-
-  isGoingToGetFood() {
-    return this.isStateQueued(Guest.STATE_GETTING_FOOD);
-  }
-
-  isGoingToGetDrink() {
-    return this.isStateQueued(Guest.STATE_GETTING_FOOD);
-  }
-
-  popState() {
-    if (this.state.queue.length === 0) {
-      return null;
-    }
-
-
   }
 
   logAction(action) {
