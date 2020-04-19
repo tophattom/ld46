@@ -156,6 +156,10 @@ class Guest {
     this.bac = Math.max(0, this.bac - 0.01);
     this.musicMoodEffect = Math.min(1, Math.max(0, rand(-0.1, 0.1)));
 
+    if (this.wantsToLeave(party) && this.isInIdleState()) {
+      this.state = Guest.STATE_LEAVING;
+    }
+
     if (Math.random() < this.hunger && this.isInIdleState()) {
       this.state = Guest.STATE_GETTING_FOOD;
       this.logAction('Ate');
@@ -167,10 +171,6 @@ class Guest {
       this.logAction('Drank');
       this.thirst -= party.drink(this.thirst);
       // TODO: Increase BAC here
-    }
-
-    if (this.wantsToLeave(party) && this.isInIdleState()) {
-      this.state = Guest.STATE_LEAVING;
     }
 
     // this.logStatus(party);
