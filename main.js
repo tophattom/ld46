@@ -292,8 +292,9 @@ class Party {
   }
 
   totalMood() {
-    // FIXME: Leaving guests shouldn't affect average guest mood
-    const avgGuestMood = this.guests.reduce((sum, guest) => sum + guest.mood(this), 0) / this.guests.length;
+    const avgGuestMood = this.guests
+      .filter(guest => !guest.isLeaving())
+      .reduce((sum, guest) => sum + guest.mood(this), 0) / this.guests.length;
     // TODO: Maybe take guest count into account somehow?
     return avgGuestMood;
   }
