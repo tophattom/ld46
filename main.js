@@ -463,21 +463,6 @@ function render(ctx, party) {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    drawMeter(ctx, 10, 10, 150, 10, party.totalMood(), 'yellow');
-    // FIXME: Cap noise level meter to 1
-    drawMeter(ctx, 10, 25, 150, 10, party.relativeNoiseLevel(), 'red');
-    drawMeter(ctx, 10, 40, 150, 10, party.relativeFoodAmount(), 'green');
-    drawMeter(ctx, 10, 55, 150, 10, party.relativeDrinksAmount(), 'blue');
-
-
-    ctx.fillStyle = 'white';
-    ctx.font = '12px sans-serif';
-    ctx.textBaseline = 'top';
-    const currentTime = party.currentTime();
-    ctx.fillText(currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), 10, 70)
-    ctx.fillText(`${party.guests.length}/${party.originalGuestCount} guests`, 10, 85);
-
-
     // Draw stations
     ctx.strokeStyle = 'white';
     STATIONS.forEach(station => {
@@ -490,8 +475,26 @@ function render(ctx, party) {
       guest.render(ctx);
     });
 
+    drawGUI(ctx, party);
+
     window.requestAnimationFrame(render(ctx, party));
   }
+}
+
+function drawGUI(ctx, party) {
+  drawMeter(ctx, 10, 10, 150, 10, party.totalMood(), 'yellow');
+  // FIXME: Cap noise level meter to 1
+  drawMeter(ctx, 10, 25, 150, 10, party.relativeNoiseLevel(), 'red');
+  drawMeter(ctx, 10, 40, 150, 10, party.relativeFoodAmount(), 'green');
+  drawMeter(ctx, 10, 55, 150, 10, party.relativeDrinksAmount(), 'blue');
+
+
+  ctx.fillStyle = 'white';
+  ctx.font = '12px sans-serif';
+  ctx.textBaseline = 'top';
+  const currentTime = party.currentTime();
+  ctx.fillText(currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), 10, 70)
+  ctx.fillText(`${party.guests.length}/${party.originalGuestCount} guests`, 10, 85);
 }
 
 
