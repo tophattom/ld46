@@ -188,6 +188,7 @@ class Guest {
     }
 
     this.pos.add(this.vel);
+    this.checkCollisions();
 
     if (this.targetPos !== null && this.isAtTarget()) {
       this.targetPos = null;
@@ -227,6 +228,20 @@ class Guest {
 
   isAtTarget() {
     return Vector.distance(this.pos, this.targetPos) < 2;
+  }
+
+  checkCollisions() {
+    if (this.hasLeft()) {
+      return;
+    }
+
+    if (this.pos.i < 0 || this.pos.i > CANVAS_WIDTH) {
+      this.vel.i *= -1;
+    }
+
+    if (this.pos.j < 0 || this.pos.j > CANVAS_HEIGHT) {
+      this.vel.j *= -1;
+    }
   }
 
   logAction(action) {
