@@ -79,7 +79,7 @@ class Guest {
   constructor(name) {
     this.name = name;
 
-    this.musicMoodEffect = rand(-0.5, 1);
+    this.musicMoodMultiplier = rand(-0.5, 1);
     // this.bacLoudnessEffect = 0.0;
 
     this.hunger = rand(0, 0.1);
@@ -104,10 +104,13 @@ class Guest {
     return Math.pow(this.thirst, 2);
   }
 
+  musicMoodEffect(party) {
+    return Math.max(-0.8, Math.log(party.musicVolume) + 1);
+  }
+
   mood(party) {
     const needsEffect = this.hungerMoodEffect() + this.thirstMoodEffect();
-    const musicEffect = party.musicVolume * this.musicMoodEffect;
-    return Math.max(0, Math.min(1, 1 - needsEffect + musicEffect));
+    return Math.max(0, Math.min(1, 1 - needsEffect + this.musicMoodEffect(party)));
   }
 
   hungerLoudness(party) {
@@ -154,7 +157,7 @@ class Guest {
     this.hunger += (0.02 + rand(0.01, 0.03));
     this.thirst += (0.02 + rand(0.02, 0.04));
     this.bac = Math.max(0, this.bac - 0.01);
-    this.musicMoodEffect = Math.min(1, Math.max(0, rand(-0.1, 0.1)));
+    this.musicMoodMultiplier = Math.min(1, Math.max(0, rand(-0.1, 0.1)));
 
     if (this.wantsToLeave(party) && this.isInIdleState()) {
       this.state = Guest.STATE_LEAVING;
@@ -287,7 +290,7 @@ class Party {
     this.guests = Array.from(Array(10)).map((l, i) => new Guest(`Guest ${i}`));
     this.neighbour = new Neighbour();
 
-    this.musicVolume = 0.2;
+    this.musicVolume = 0.3;
 
     this.maxFoodAmount = this.guests.length / 2;
     this.maxDrinksAmount = this.guests.length / 2;
