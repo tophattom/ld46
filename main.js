@@ -336,6 +336,14 @@ class Party {
     return avgGuestMood;
   }
 
+  addFood(amount) {
+    this.foodAmount = Math.min(this.maxFoodAmount, this.foodAmount + amount);
+  }
+
+  addDrinks(amount) {
+    this.drinksAmount = Math.min(this.maxDrinksAmount, this.drinksAmount + amount);
+  }
+
   eat(amount) {
     let eaten;
 
@@ -429,6 +437,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const tickButton = document.querySelector('#tick-button');
   const volumeUpButton = document.querySelector('#volume-up');
   const volumeDownButton = document.querySelector('#volume-down');
+  const addFoodButton = document.querySelector('#add-food');
+  const addDrinksButton = document.querySelector('#add-drinks');
 
   tickButton.addEventListener('click', () => {
     party.tick();
@@ -443,6 +453,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   volumeDownButton.addEventListener('click', () => {
     party.changeVolume(-0.1);
+  });
+
+  addFoodButton.addEventListener('click', () => {
+    party.addFood(1);
+  });
+
+  addDrinksButton.addEventListener('click', () => {
+    party.addDrinks(1);
   });
 
   console.log(party);
