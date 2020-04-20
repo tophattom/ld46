@@ -103,8 +103,12 @@ class Party {
     return this.guests.length < Math.floor(this.originalGuestCount / 3);
   }
 
-  isGameOver() {
+  shouldEndGame() {
     return this.isGuestCountTooLow();
+  }
+
+  isGameOver() {
+    return this.state === Party.STATE_GAME_OVER;
   }
 
   tick() {
@@ -124,7 +128,7 @@ class Party {
       return !left;
     });
 
-    if (this.isGameOver()) {
+    if (this.shouldEndGame()) {
       this.state = Party.STATE_GAME_OVER;
       console.log('GAME OVER!');
     }

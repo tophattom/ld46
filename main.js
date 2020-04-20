@@ -98,7 +98,11 @@ function render(ctx, party) {
 
     drawGUI(ctx, party);
 
-    window.requestAnimationFrame(render(ctx, party));
+    if (party.isGameOver()) {
+      drawGameOver(ctx);
+    } else {
+      window.requestAnimationFrame(render(ctx, party));
+    }
   }
 }
 
@@ -153,4 +157,13 @@ function drawCircle(ctx, x, y, r, fill = false) {
 
 function drawImg(ctx, img, x, y) {
   ctx.drawImage(img, x, y, img.width / DPR, img.height / DPR);
+}
+
+
+function drawGameOver(ctx, reason) {
+  ctx.fillStyle = 'white';
+  ctx.font = '72px VT323, monospace';
+  ctx.textBaseline = 'bottom';
+  ctx.textAlign = 'center';
+  ctx.fillText('GAME OVER!', PLAY_AREA.x + PLAY_AREA.width / 2, PLAY_AREA.y + PLAY_AREA.height / 2);
 }
