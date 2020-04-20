@@ -49,7 +49,7 @@ GUEST_IMG.src = `img/guest${IMG_SUFFIX}.png`;
 const STEREO_SPRITE = new AnimatedSprite(
   `img/stereo${IMG_SUFFIX}.png`,
   6,
-  400,
+  231,
   0,
   3,
   DPR
