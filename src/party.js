@@ -157,7 +157,6 @@ class Party {
     if (this.shouldEndGame()) {
       this.state = Party.STATE_GAME_OVER;
       this.musicElem.pause();
-      console.log('GAME OVER!');
     }
   }
 }
