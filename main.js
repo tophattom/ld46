@@ -4,20 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const gameCanvas = document.querySelector('#game-canvas');
   const ctx = setupCanvas(gameCanvas, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  const tickButton = document.querySelector('#tick-button');
   const volumeUpButton = document.querySelector('#volume-up');
   const volumeDownButton = document.querySelector('#volume-down');
   const addFoodButton = document.querySelector('#add-food');
   const addDrinksButton = document.querySelector('#add-drinks');
-
-  // tickButton.addEventListener('click', () => {
-  //   party.tick();
-
-  //   if (DEBUG) {
-  //     console.log(`Noise level: ${party.noiseLevel()}`);
-  //     console.log(`Overall mood: ${party.totalMood()}`);
-  //   }
-  // });
 
   let foodReserve = 3;
   let drinksReserve = 5;
