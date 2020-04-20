@@ -1,6 +1,6 @@
 class Neighbour {
   constructor() {
-    this.baseNoiseTolerance = 4.0;
+    this.baseNoiseTolerance = 5.0;
   }
 
   noiseTolerance(time) {

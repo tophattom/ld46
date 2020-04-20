@@ -6,13 +6,13 @@ class Party {
 
   constructor() {
     // this.guests = [new Guest('guest 1'), new Guest('guest 2'), new Guest('guest 3')];
-    this.guests = Array.from(Array(10)).map((l, i) => new Guest(`Guest ${i}`));
+    this.guests = Array.from(Array(15)).map((l, i) => new Guest(`Guest ${i}`));
     this.neighbour = new Neighbour();
 
     this.musicVolume = 0.3;
 
-    this.maxFoodAmount = this.guests.length / 2;
-    this.maxDrinksAmount = this.guests.length / 2;
+    this.maxFoodAmount = Math.ceil(this.guests.length / 2);
+    this.maxDrinksAmount = Math.ceil(this.guests.length / 2);
     this.foodAmount = this.maxFoodAmount;
     this.drinksAmount = this.maxDrinksAmount;
 
@@ -156,6 +156,7 @@ class Party {
 
     if (this.shouldEndGame()) {
       this.state = Party.STATE_GAME_OVER;
+      this.musicElem.pause();
       console.log('GAME OVER!');
     }
   }

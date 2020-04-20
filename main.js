@@ -31,11 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   addFoodButton.addEventListener('click', () => {
-    party.addFood(1);
+    party.addFood(2);
   });
 
   addDrinksButton.addEventListener('click', () => {
-    party.addDrinks(1);
+    party.addDrinks(2);
   });
 
   if (DEBUG) {
