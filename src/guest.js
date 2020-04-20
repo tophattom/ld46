@@ -191,6 +191,10 @@ class Guest {
   }
 
   logAction(action) {
+    if (!DEBUG) {
+      return;
+    }
+
     console.log(`${this.name}: ${action}`)
   }
 

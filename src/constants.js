@@ -1,3 +1,5 @@
+const DEBUG = false;
+
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 600;
 

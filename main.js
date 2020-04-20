@@ -13,8 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
   tickButton.addEventListener('click', () => {
     party.tick();
 
-    console.log(`Noise level: ${party.noiseLevel()}`);
-    console.log(`Overall mood: ${party.totalMood()}`);
+    if (DEBUG) {
+      console.log(`Noise level: ${party.noiseLevel()}`);
+      console.log(`Overall mood: ${party.totalMood()}`);
+    }
   });
 
   volumeUpButton.addEventListener('click', () => {
@@ -33,10 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
     party.addDrinks(1);
   });
 
-  console.log(party);
+  if (DEBUG) {
+    console.log(party);
+  }
 
   window.requestAnimationFrame(render(ctx, party));
-  // window.setInterval(() => { party.tick() }, 1000);
+  window.setInterval(() => { party.tick() }, 3000);
 });
 
 
@@ -70,14 +74,16 @@ function render(ctx, party) {
     STEREO_SPRITE.draw(ctx, 383, 69);
 
     // Draw stations
-    // ctx.strokeStyle = 'white';
-    // STATIONS.forEach(station => {
-    //   if (station.radius) {
-    //     drawCircle(ctx, station.pos.i, station.pos.j, station.radius);
-    //   } else {
-    //     ctx.strokeRect(station.pos.i, station.pos.j, station.width, station.height);
-    //   }
-    // });
+    if (DEBUG) {
+      ctx.strokeStyle = 'white';
+      STATIONS.forEach(station => {
+        if (station.radius) {
+          drawCircle(ctx, station.pos.i, station.pos.j, station.radius);
+        } else {
+          ctx.strokeRect(station.pos.i, station.pos.j, station.width, station.height);
+        }
+      });
+    }
 
     // Update and draw guests
     party.guests
