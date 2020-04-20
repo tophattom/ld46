@@ -11,14 +11,12 @@ class Guest {
     this.name = name;
 
     this.musicMoodMultiplier = rand(-0.5, 1);
-    // this.bacLoudnessEffect = 0.0;
 
     this.hunger = rand(0, 0.1);
     this.thirst = rand(0, 0.1);
     this.bac = rand(0, 0.5);
 
     this.baseLoudness = 0.1;
-    // this.mood = 0.0;
 
     this.state = Guest.STATE_WANDERING;
 
@@ -106,8 +104,6 @@ class Guest {
       this.thirst -= party.drink(this.thirst);
       // TODO: Increase BAC here
     }
-
-    // this.logStatus(party);
   }
 
   update(dt) {
@@ -160,7 +156,6 @@ class Guest {
     }
 
     ctx.drawImage(GUEST_IMG, this.pos.i - 16, this.pos.j - 130, 32, 130);
-    // drawCircle(ctx, this.pos.i, this.pos.j, 10, true);
   }
 
   setWanderingVelocity() {

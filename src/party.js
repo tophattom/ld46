@@ -5,7 +5,6 @@ class Party {
   static MINUTES_PER_TICK = 10;
 
   constructor() {
-    // this.guests = [new Guest('guest 1'), new Guest('guest 2'), new Guest('guest 3')];
     this.guests = Array.from(Array(15)).map((l, i) => new Guest(`Guest ${i}`));
     this.neighbour = new Neighbour();
 
