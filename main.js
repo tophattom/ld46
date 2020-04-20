@@ -123,7 +123,7 @@ function drawGUI(ctx, party) {
 function drawMeters(ctx, x, y, party) {
   drawMeter(ctx, x, y, 136, 9, party.totalMood(), 'gold', 'MOOD:');
   // FIXME: Cap noise level meter to 1
-  drawMeter(ctx, x, y + 35, 136, 9, party.relativeNoiseLevel(), 'darkred', 'NOISE LEVEL:');
+  drawMeter(ctx, x, y + 35, 136, 9, Math.min(1, party.relativeNoiseLevel()), 'darkred', 'NOISE LEVEL:');
   drawMeter(ctx, x, y + 70, 136, 9, party.relativeFoodAmount(), 'darkgreen', 'FOOD:');
   drawMeter(ctx, x, y + 105, 136, 9, party.relativeDrinksAmount(), 'blue', 'DRINKS:');
 }

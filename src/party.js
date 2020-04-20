@@ -103,8 +103,12 @@ class Party {
     return this.guests.length < Math.floor(this.originalGuestCount / 3);
   }
 
+  tooMuchNoise() {
+    return this.noiseLevel() > this.neighbour.noiseTolerance(this.currentTick);
+  }
+
   shouldEndGame() {
-    return this.isGuestCountTooLow();
+    return this.isGuestCountTooLow() || this.tooMuchNoise();
   }
 
   isGameOver() {

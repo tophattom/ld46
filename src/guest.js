@@ -36,7 +36,7 @@ class Guest {
   }
 
   musicMoodEffect(party) {
-    return Math.max(-0.8, Math.log(party.musicVolume) + 1);
+    return Math.max(-0.8, Math.log(party.musicVolume) + 0.8);
   }
 
   mood(party) {
