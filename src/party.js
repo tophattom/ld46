@@ -1,4 +1,5 @@
 class Party {
+  static STATE_STOPPED = 'STATE_STOPPED';
   static STATE_RUNNING = 'STATE_RUNNING';
   static STATE_GAME_OVER = 'STATE_GAME_OVER';
   static MINUTES_PER_TICK = 10;
@@ -15,7 +16,7 @@ class Party {
     this.foodAmount = this.maxFoodAmount;
     this.drinksAmount = this.maxDrinksAmount;
 
-    this.state = Party.STATE_RUNNING;
+    this.state = Party.STATE_STOPPED;
 
     this.currentTick = 0;
     this.neighbourWarnings = 0;
@@ -35,6 +36,11 @@ class Party {
     return new Date(2020, 4, 1, 18, this.currentTick * Party.MINUTES_PER_TICK);
   }
 
+  start() {
+    this.state = Party.STATE_RUNNING;
+    this.musicElem.play();
+  }
+
   changeVolume(amount) {
     this.musicVolume = Math.max(0, Math.min(1, this.musicVolume + amount));
     this.gainNode.gain.setValueAtTime(Math.pow(this.musicVolume, 2), this.audioContext.currentTime);
@@ -43,7 +49,6 @@ class Party {
       STEREO_SPRITE.setFrameRange(4, 4);
       STEREO_SPRITE.reset();
     } else {
-      this.musicElem.play();
       STEREO_SPRITE.setFrameRange(0, 3);
       STEREO_SPRITE.start();
     }
@@ -122,6 +127,14 @@ class Party {
 
   isGameOver() {
     return this.state === Party.STATE_GAME_OVER;
+  }
+
+  stopped() {
+    return this.state === Party.STATE_STOPPED;
+  }
+
+  running() {
+    return this.state === Party.STATE_RUNNING;
   }
 
   tick() {

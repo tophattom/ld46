@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   volumeUpButton.addEventListener('click', () => {
     party.changeVolume(0.1);
+    if (party.stopped()) {
+      party.start();
+    }
   });
 
   volumeDownButton.addEventListener('click', () => {
@@ -86,19 +89,27 @@ function render(ctx, party) {
     }
 
     // Update and draw guests
-    party.guests
-      .sort((a, b) => a.pos.j - b.pos.j)
-      .forEach(guest => {
-        guest.update(dt);
-        guest.render(ctx);
-      });
+    if (party.running()) {
+      party.guests
+        .sort((a, b) => a.pos.j - b.pos.j)
+        .forEach(guest => {
+          guest.update(dt);
+          guest.render(ctx);
+        });
+    }
+
+
 
     // Draw vingette
     drawImg(ctx, VINGETTE_IMG, 160, 0);
 
     drawGUI(ctx, party);
 
-    if (party.isGameOver()) {
+    if (party.stopped()) {
+      drawStartInstructions(ctx);
+      window.requestAnimationFrame(render(ctx, party));
+      return;
+    } else if (party.isGameOver()) {
       drawGameOver(ctx);
     } else {
       window.requestAnimationFrame(render(ctx, party));
@@ -166,4 +177,12 @@ function drawGameOver(ctx, reason) {
   ctx.textBaseline = 'bottom';
   ctx.textAlign = 'center';
   ctx.fillText('GAME OVER!', PLAY_AREA.x + PLAY_AREA.width / 2, PLAY_AREA.y + PLAY_AREA.height / 2);
+}
+
+function drawStartInstructions(ctx) {
+  ctx.fillStyle = 'white';
+  ctx.font = '32px VT323, monospace';
+  ctx.textBaseline = 'bottom';
+  ctx.textAlign = 'center';
+  ctx.fillText('Turn up the volume to start the party!', PLAY_AREA.x + PLAY_AREA.width / 2, PLAY_AREA.y + PLAY_AREA.height / 2)
 }
