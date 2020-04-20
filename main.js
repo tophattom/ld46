@@ -20,6 +20,10 @@ class Vector {
     return new Vector(x + Math.cos(randAngle) * randRadius, y - Math.sin(randAngle) * randRadius);
   }
 
+  static randInRect(x, y, w, h) {
+    return new Vector(rand(x, x + w), rand(y, y + h));
+  }
+
   add(v) {
     this.i += v.i;
     this.j += v.j;
@@ -91,7 +95,7 @@ class Guest {
 
     this.state = Guest.STATE_WANDERING;
 
-    this.pos = new Vector(rand(0, CANVAS_WIDTH), rand(0, CANVAS_HEIGHT));
+    this.pos = Vector.randInRect(PLAY_AREA.x, PLAY_AREA.y, PLAY_AREA.width, PLAY_AREA.height);
     this.vel = new Vector(rand(-1, 1), rand(-1, 1));
     this.targetPos = null;
   }
@@ -185,15 +189,15 @@ class Guest {
       this.setWanderingVelocity();
     } else if (this.state === Guest.STATE_GETTING_FOOD) {
       if (this.targetPos === null) {
-        this.targetPos = Vector.randInCircle(FOOD_STATION.pos.i, FOOD_STATION.pos.j, FOOD_STATION.radius);
+        this.targetPos = Vector.randInRect(FOOD_STATION.pos.i, FOOD_STATION.pos.j, FOOD_STATION.width, FOOD_STATION.height);
       }
     } else if (this.state === Guest.STATE_GETTING_DRINK) {
       if (this.targetPos === null) {
-        this.targetPos = Vector.randInCircle(DRINK_STATION.pos.i, DRINK_STATION.pos.j, DRINK_STATION.radius);
+        this.targetPos = Vector.randInRect(DRINK_STATION.pos.i, DRINK_STATION.pos.j, DRINK_STATION.width, DRINK_STATION.height);
       }
     } else if (this.state === Guest.STATE_LEAVING) {
       if (this.targetPos === null) {
-        this.targetPos = Vector.randInCircle(DOOR.pos.i, DOOR.pos.j, DOOR.radius);
+        this.targetPos = Vector.randInRect(DOOR.pos.i, DOOR.pos.j, DOOR.width, DOOR.height);
       }
     }
 
@@ -249,11 +253,11 @@ class Guest {
       return;
     }
 
-    if (this.pos.i < 0 || this.pos.i > CANVAS_WIDTH) {
+    if (this.pos.i < PLAY_AREA.x || this.pos.i > (PLAY_AREA.x + PLAY_AREA.width)) {
       this.vel.i *= -1;
     }
 
-    if (this.pos.j < 0 || this.pos.j > CANVAS_HEIGHT) {
+    if (this.pos.j < PLAY_AREA.y || this.pos.j > (PLAY_AREA.y + PLAY_AREA.height)) {
       this.vel.j *= -1;
     }
   }
@@ -406,22 +410,32 @@ class Party {
 }
 
 
-const CANVAS_WIDTH = 640;
-const CANVAS_HEIGHT = 480;
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 600;
+
+const PLAY_AREA = {
+  x: 184,
+  y: 140,
+  width: 593,
+  height: 436,
+};
 
 const FOOD_STATION = {
-  pos: new Vector(50, 200),
-  radius: 30,
+  pos: new Vector(280, 280),
+  width: 40,
+  height: 200,
 };
 
 const DRINK_STATION = {
-  pos: new Vector(500, 200),
-  radius: 30,
+  pos: new Vector(640, 200),
+  width: 40,
+  height: 200,
 };
 
 const DOOR = {
-  pos: new Vector(320, 440),
-  radius: 40,
+  pos: new Vector(420, 540),
+  width: 115,
+  height: 35,
 };
 
 const STATIONS = [
@@ -430,6 +444,14 @@ const STATIONS = [
   DOOR,
 ];
 
+const DPR = window.devicePixelRatio || 1;
+const IMG_SUFFIX = DPR === 1 ? '' : `@${DPR}x`;
+
+const BACKGROUND_IMG = new Image();
+BACKGROUND_IMG.src = `img/background${IMG_SUFFIX}.png`;
+
+const VINGETTE_IMG = new Image();
+VINGETTE_IMG.src = `img/vingette${IMG_SUFFIX}.png`;
 
 document.addEventListener('DOMContentLoaded', () => {
   const party = new Party();
@@ -496,10 +518,17 @@ function render(ctx, party) {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+    // Draw background
+    drawImg(ctx, BACKGROUND_IMG, 0, 0);
+
     // Draw stations
     ctx.strokeStyle = 'white';
     STATIONS.forEach(station => {
-      drawCircle(ctx, station.pos.i, station.pos.j, station.radius);
+      if (station.radius) {
+        drawCircle(ctx, station.pos.i, station.pos.j, station.radius);
+      } else {
+        ctx.strokeRect(station.pos.i, station.pos.j, station.width, station.height);
+      }
     });
 
     // Update and draw guests
@@ -508,6 +537,9 @@ function render(ctx, party) {
       guest.render(ctx);
     });
 
+    // Draw vingette
+    drawImg(ctx, VINGETTE_IMG, 160, 0);
+
     drawGUI(ctx, party);
 
     window.requestAnimationFrame(render(ctx, party));
@@ -515,27 +547,40 @@ function render(ctx, party) {
 }
 
 function drawGUI(ctx, party) {
-  drawMeter(ctx, 10, 10, 150, 10, party.totalMood(), 'yellow');
-  // FIXME: Cap noise level meter to 1
-  drawMeter(ctx, 10, 25, 150, 10, party.relativeNoiseLevel(), 'red');
-  drawMeter(ctx, 10, 40, 150, 10, party.relativeFoodAmount(), 'green');
-  drawMeter(ctx, 10, 55, 150, 10, party.relativeDrinksAmount(), 'blue');
-
+  drawMeters(ctx, 12, 130, party);
 
   ctx.fillStyle = 'white';
-  ctx.font = '12px sans-serif';
+  ctx.font = '40px VT323, monospace';
   ctx.textBaseline = 'top';
+  ctx.textAlign = 'center';
   const currentTime = party.currentTime();
-  ctx.fillText(currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), 10, 70)
-  ctx.fillText(`${party.guests.length}/${party.originalGuestCount} guests`, 10, 85);
+  ctx.fillText(currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), 80, 20)
+
+  ctx.font = '24px VT323, monospace';
+  ctx.fillText(`${party.guests.length}/${party.originalGuestCount} guests`, 80, 60);
 }
 
+function drawMeters(ctx, x, y, party) {
+  drawMeter(ctx, x, y, 136, 9, party.totalMood(), 'gold', 'MOOD:');
+  // FIXME: Cap noise level meter to 1
+  drawMeter(ctx, x, y + 35, 136, 9, party.relativeNoiseLevel(), 'darkred', 'NOISE LEVEL:');
+  drawMeter(ctx, x, y + 70, 136, 9, party.relativeFoodAmount(), 'darkgreen', 'FOOD:');
+  drawMeter(ctx, x, y + 105, 136, 9, party.relativeDrinksAmount(), 'darkblue', 'DRINKS:');
+}
 
-function drawMeter(ctx, x, y, width, height, p, color) {
+function drawMeter(ctx, x, y, width, height, p, color, label) {
+  ctx.fillStyle = 'white';
+  ctx.font = '20px VT323, monospace';
+  ctx.textBaseline = 'bottom';
+  ctx.textAlign = 'left';
+  ctx.fillText(label, x - 2, y);
+
+  ctx.fillRect(x - 2, y - 2, width + 4, height + 4);
+
+  ctx.fillStyle = 'black';
+  ctx.fillRect(x, y, width, height);
+
   ctx.fillStyle = color;
-  ctx.strokeStyle = color;
-
-  ctx.strokeRect(x, y, width, height);
   ctx.fillRect(x, y, width * p, height);
 }
 
@@ -548,4 +593,8 @@ function drawCircle(ctx, x, y, r, fill = false) {
   } else {
     ctx.stroke();
   }
+}
+
+function drawImg(ctx, img, x, y) {
+  ctx.drawImage(img, x, y, img.width / DPR, img.height / DPR);
 }
