@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
   //   }
   // });
 
+  let foodReserve = 3;
+  let drinksReserve = 5;
+
   volumeUpButton.addEventListener('click', () => {
     party.changeVolume(0.1);
     if (party.stopped()) {
@@ -27,15 +30,31 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   volumeDownButton.addEventListener('click', () => {
-    party.changeVolume(-0.1);
+    if (party.running()) {
+      party.changeVolume(-0.1);
+    }
   });
 
   addFoodButton.addEventListener('click', () => {
-    party.addFood(2);
+    if (party.running()) {
+      party.addFood(4);
+
+      foodReserve--;
+      if (foodReserve === 0) {
+        addFoodButton.disabled = 'disabled';
+      }
+    }
   });
 
   addDrinksButton.addEventListener('click', () => {
-    party.addDrinks(2);
+    if (party.running()) {
+      party.addDrinks(4);
+
+      drinksReserve--;
+      if (drinksReserve === 0) {
+        addDrinksButton.disabled = 'disabled';
+      }
+    }
   });
 
   if (DEBUG) {
