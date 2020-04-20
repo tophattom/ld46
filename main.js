@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const addFoodButton = document.querySelector('#add-food');
   const addDrinksButton = document.querySelector('#add-drinks');
 
-  tickButton.addEventListener('click', () => {
-    party.tick();
+  // tickButton.addEventListener('click', () => {
+  //   party.tick();
 
-    if (DEBUG) {
-      console.log(`Noise level: ${party.noiseLevel()}`);
-      console.log(`Overall mood: ${party.totalMood()}`);
-    }
-  });
+  //   if (DEBUG) {
+  //     console.log(`Noise level: ${party.noiseLevel()}`);
+  //     console.log(`Overall mood: ${party.totalMood()}`);
+  //   }
+  // });
 
   volumeUpButton.addEventListener('click', () => {
     party.changeVolume(0.1);
@@ -121,7 +121,7 @@ function drawMeters(ctx, x, y, party) {
   // FIXME: Cap noise level meter to 1
   drawMeter(ctx, x, y + 35, 136, 9, party.relativeNoiseLevel(), 'darkred', 'NOISE LEVEL:');
   drawMeter(ctx, x, y + 70, 136, 9, party.relativeFoodAmount(), 'darkgreen', 'FOOD:');
-  drawMeter(ctx, x, y + 105, 136, 9, party.relativeDrinksAmount(), 'darkblue', 'DRINKS:');
+  drawMeter(ctx, x, y + 105, 136, 9, party.relativeDrinksAmount(), 'blue', 'DRINKS:');
 }
 
 function drawMeter(ctx, x, y, width, height, p, color, label) {

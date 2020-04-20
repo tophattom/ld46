@@ -15,12 +15,40 @@
     <script src="src/neighbour.js"></script>
     <script src="src/party.js"></script>
     <script src="main.js"></script>
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        align-items: center;
+        background: #111;
+        display: flex;
+        flex-direction: column;
+      }
+
+      button {
+        background: darkred;
+        border: 2px solid white;
+        color: white;
+        font-family: VT323, monospace;
+        font-size: 16pt;
+        margin: 0 5px;
+        padding: 5px 10px;
+      }
+
+      .buttons {
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
     <canvas id="game-canvas"></canvas>
 
-    <div>
-      <button id="tick-button">Tick</button>
+    <div class="buttons">
+      <!-- <button id="tick-button">Tick</button> -->
       <button id="volume-up">Volume up</button>
       <button id="volume-down">Volume down</button>
       <button id="add-food">Add food</button>
