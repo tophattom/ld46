@@ -159,7 +159,8 @@ class Guest {
       ctx.fillStyle = 'white';
     }
 
-    drawCircle(ctx, this.pos.i, this.pos.j, 10, true);
+    ctx.drawImage(GUEST_IMG, this.pos.i - 16, this.pos.j - 130, 32, 130);
+    // drawCircle(ctx, this.pos.i, this.pos.j, 10, true);
   }
 
   setWanderingVelocity() {

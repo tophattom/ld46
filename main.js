@@ -70,20 +70,22 @@ function render(ctx, party) {
     STEREO_SPRITE.draw(ctx, 383, 69);
 
     // Draw stations
-    ctx.strokeStyle = 'white';
-    STATIONS.forEach(station => {
-      if (station.radius) {
-        drawCircle(ctx, station.pos.i, station.pos.j, station.radius);
-      } else {
-        ctx.strokeRect(station.pos.i, station.pos.j, station.width, station.height);
-      }
-    });
+    // ctx.strokeStyle = 'white';
+    // STATIONS.forEach(station => {
+    //   if (station.radius) {
+    //     drawCircle(ctx, station.pos.i, station.pos.j, station.radius);
+    //   } else {
+    //     ctx.strokeRect(station.pos.i, station.pos.j, station.width, station.height);
+    //   }
+    // });
 
     // Update and draw guests
-    // party.guests.forEach(guest => {
-    //   guest.update(dt);
-    //   guest.render(ctx);
-    // });
+    party.guests
+      .sort((a, b) => a.pos.j - b.pos.j)
+      .forEach(guest => {
+        guest.update(dt);
+        guest.render(ctx);
+      });
 
     // Draw vingette
     drawImg(ctx, VINGETTE_IMG, 160, 0);

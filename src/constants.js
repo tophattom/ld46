@@ -2,10 +2,10 @@ const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 600;
 
 const PLAY_AREA = {
-  x: 184,
-  y: 140,
-  width: 593,
-  height: 436,
+  x: 285,
+  y: 170,
+  width: 380,
+  height: 410,
 };
 
 const FOOD_STATION = {
@@ -41,6 +41,8 @@ BACKGROUND_IMG.src = `img/background${IMG_SUFFIX}.png`;
 const VINGETTE_IMG = new Image();
 VINGETTE_IMG.src = `img/vingette${IMG_SUFFIX}.png`;
 
+const GUEST_IMG = new Image();
+GUEST_IMG.src = `img/guest${IMG_SUFFIX}.png`;
 
 const STEREO_SPRITE = new AnimatedSprite(
   `img/stereo${IMG_SUFFIX}.png`,
