@@ -30,6 +30,14 @@ class Party {
 
   changeVolume(amount) {
     this.musicVolume = Math.max(0, Math.min(1, this.musicVolume + amount));
+
+    if (this.musicVolume === 0) {
+      STEREO_SPRITE.setFrameRange(4, 4);
+      STEREO_SPRITE.reset();
+    } else {
+      STEREO_SPRITE.setFrameRange(0, 3);
+      STEREO_SPRITE.start();
+    }
   }
 
   noiseLevel() {

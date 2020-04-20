@@ -66,6 +66,9 @@ function render(ctx, party) {
     // Draw background
     drawImg(ctx, BACKGROUND_IMG, 0, 0);
 
+    // Draw stereo
+    STEREO_SPRITE.draw(ctx, 383, 69);
+
     // Draw stations
     ctx.strokeStyle = 'white';
     STATIONS.forEach(station => {
@@ -77,10 +80,10 @@ function render(ctx, party) {
     });
 
     // Update and draw guests
-    party.guests.forEach(guest => {
-      guest.update(dt);
-      guest.render(ctx);
-    });
+    // party.guests.forEach(guest => {
+    //   guest.update(dt);
+    //   guest.render(ctx);
+    // });
 
     // Draw vingette
     drawImg(ctx, VINGETTE_IMG, 160, 0);

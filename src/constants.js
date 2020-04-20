@@ -40,3 +40,13 @@ BACKGROUND_IMG.src = `img/background${IMG_SUFFIX}.png`;
 
 const VINGETTE_IMG = new Image();
 VINGETTE_IMG.src = `img/vingette${IMG_SUFFIX}.png`;
+
+
+const STEREO_SPRITE = new AnimatedSprite(
+  `img/stereo${IMG_SUFFIX}.png`,
+  6,
+  400,
+  0,
+  3,
+  DPR
+);

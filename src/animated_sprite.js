@@ -28,7 +28,15 @@ class AnimatedSprite {
         this.endFrame = end;
     }
 
+    reset() {
+        this.currentFrame = this.startFrame;
+    }
+
     start() {
+        if (this.interval) {
+            return;
+        }
+
         this.interval = window.setInterval(() => {
             this.currentFrame++;
             if (this.currentFrame > this.endFrame) {
@@ -39,6 +47,7 @@ class AnimatedSprite {
 
     stop() {
         window.clearInterval(this.interval);
+        this.interval = null;
     }
 
     draw(ctx, x, y) {
