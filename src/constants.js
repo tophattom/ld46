@@ -34,7 +34,7 @@ const STATIONS = [
   DOOR,
 ];
 
-const DPR = window.devicePixelRatio || 1;
+const DPR = Math.max(1, Math.min(2, Math.ceil(window.devicePixelRatio || 1)));
 const IMG_SUFFIX = DPR === 1 ? '' : `@${DPR}x`;
 
 const BACKGROUND_IMG = new Image();
