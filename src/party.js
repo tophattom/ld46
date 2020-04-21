@@ -23,12 +23,10 @@ class Party {
     this.originalGuestCount = this.guests.length;
     this.startTime = new Date(2020, 4, 1, 18, 0, 0);
 
-    this.audioContext = new AudioContext();
-    this.musicElem = document.querySelector('#music');
-    this.musicSource = this.audioContext.createMediaElementSource(this.musicElem);
-    this.gainNode = this.audioContext.createGain();
-
-    this.musicSource.connect(this.gainNode).connect(this.audioContext.destination);
+    this.audioContext = null;
+    this.musicElem = null;
+    this.musicSource = null;
+    this.gainNode = null;
   }
 
   currentTime() {
@@ -36,8 +34,19 @@ class Party {
   }
 
   start() {
+    this.createAudioContext();
+
     this.state = Party.STATE_RUNNING;
     this.musicElem.play();
+  }
+
+  createAudioContext() {
+    this.audioContext = new AudioContext();
+    this.musicElem = document.querySelector('#music');
+    this.musicSource = this.audioContext.createMediaElementSource(this.musicElem);
+    this.gainNode = this.audioContext.createGain();
+
+    this.musicSource.connect(this.gainNode).connect(this.audioContext.destination);
   }
 
   changeVolume(amount) {

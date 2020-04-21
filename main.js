@@ -13,10 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let drinksReserve = 5;
 
   volumeUpButton.addEventListener('click', () => {
-    party.changeVolume(0.1);
     if (party.stopped()) {
       party.start();
     }
+
+    party.changeVolume(0.1);
   });
 
   volumeDownButton.addEventListener('click', () => {
